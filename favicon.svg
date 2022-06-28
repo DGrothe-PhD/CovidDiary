@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="88.571426"
+   height="88.571426"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r"
+   sodipodi:docname="favicon.svg">
+  <defs
+     id="defs4">
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect3815"
+       effect="spiro" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect3790"
+       is_visible="true" />
+    <linearGradient
+       id="linearGradient3755">
+      <stop
+         style="stop-color:#ff4a00;stop-opacity:1;"
+         offset="0"
+         id="stop3757" />
+      <stop
+         style="stop-color:#007b06;stop-opacity:1;"
+         offset="1"
+         id="stop3759" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3755"
+       id="linearGradient3761"
+       x1="45.214287"
+       y1="85.219322"
+       x2="134.78571"
+       y2="85.219322"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="-46.474098"
+     inkscape:cy="-60.000001"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="841"
+     inkscape:window-height="556"
+     inkscape:window-x="104"
+     inkscape:window-y="104"
+     inkscape:window-maximized="0"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-45.714287,-40.933613)">
+    <rect
+       style="fill:url(#linearGradient3761);fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="rect2985"
+       width="88.571426"
+       height="88.571426"
+       x="45.714287"
+       y="40.933613"
+       rx="0.7247979"
+       ry="1.2298737" />
+    <text
+       xml:space="preserve"
+       style="font-size:31.87914658px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="63.535744"
+       y="114.86933"
+       id="text3763"
+       sodipodi:linespacing="125%"
+       transform="scale(1.0213654,0.97908153)"><tspan
+         sodipodi:role="line"
+         x="63.535744"
+         y="114.86933"
+         id="tspan3767"
+         style="font-size:77.34024811px;font-weight:bold;fill:#800000;-inkscape-font-specification:Sans Bold">C</tspan></text>
+    <path
+       style="fill:none;stroke:#740000;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="M 47.734592,42.631921 45.714287,129.50504"
+       id="path3788"
+       inkscape:path-effect="#path-effect3790"
+       inkscape:original-d="M 47.734592,42.631921 45.714287,129.50504"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       inkscape:original-d="M 57.734592,42.631921 55.714287,129.50504"
+       inkscape:path-effect="#path-effect3815"
+       id="path3813"
+       d="M 57.734592,42.631921 55.714287,129.50504"
+       style="fill:none;stroke:#741f00;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:10, 10;stroke-dashoffset:0" />
+  </g>
+</svg>

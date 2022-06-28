@@ -1,0 +1,628 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Local Covid Diary</title><meta charset="UTF-8">
+<meta name="mobile-web-app-capable" content="yes">
+     <link rel="icon" sizes="192x192" href="/favicon.ico">
+<link rel="icon" type="image/svg+xml" href="favicon.svg" sizes="any">
+</head>
+
+<body onload="DisplayDate()">
+
+<style>
+/* Small screen / tablet / 760px to 991px */
+@media (max-width: 991px) {
+  font-size:2em;
+}
+
+/* Smaller screen / tablet+phone / 480px to 759px */
+@media (max-width: 759px) {
+  font-size:2em;
+}
+
+/* Extra small screen / smartphone / 280px to 479px */
+@media (max-width: 479px) {
+  font-size:2em;
+}
+tt {
+  font-size:2ex;
+}
+header{
+  background-color:olivedrab;
+}
+body{
+  background-color: papayawhip;
+}
+button{
+  min-width: 10em;
+  min-height: 2em;
+  border-color:maroon;
+  color:white;
+}
+td > button{
+  min-width: 3em;
+  background:orange;
+}
+button:active{
+  font-weight:bold;
+  border-width:2pt;
+  border-color:limegreen;
+}
+details > summary{
+  font-weight:bold;
+  text-transform:uppercase;
+  background: limegreen;
+  padding-left: 3px;
+  margin-bottom:0.5ex;
+}
+details > details{
+  padding-left:2ex;
+}
+details > details > summary{
+  background: darkorange;
+  color:maroon;
+}
+
+.form, header, button, textarea, input, details > summary{
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.form{
+  background-color:darkseagreen;
+  padding-bottom:1ex;
+}
+table{
+  margin-bottom:1ex;
+}
+.color1{
+  background-color:forestgreen;
+}
+.color2{
+  background-color:orange;
+}
+.remark{
+  background:#a37272;
+  }
+p > span {
+  font-weight:bold;
+  text-decoration:underline maroon;
+  margin-right:2ex;
+}
+
+/* places colors */
+.green{
+  color: darkgreen;
+}
+.blue{
+  color: blue;
+}
+.lightblue{
+  color: royalblue;
+}
+.red{
+  color: red;
+}
+.orange{
+  color: darkorange;
+}
+
+p > span:active{
+  color: mediumseagreen;
+}
+details{
+  margin-top:1ex;
+}
+.column{
+  margin-right:2ex;
+  width:20em;
+  float:left;
+  grid-column: auto;
+  grid-row: auto;
+}
+</style>
+
+<font face="Arial">
+
+
+<header class="color1">Covid diary for contact tracing</header>
+<div style="font-size:8pt" id="datespace" name="datespace"></div>
+<noscript>
+      JavaScript is not activated in your browser.
+</noscript>
+
+<script>
+function DisplayDate(){
+foo = new Date;
+document.getElementById("datespace").innerHTML = foo;
+delete foo;
+}
+
+/* parseTime taken from https://stackoverflow.com/questions/141348/what-is-the-best-way-to-parse-a-time-into-a-date-object-from-user-input-in-javas 
+   modified by inserting code to handle pointed times 7.34 and dates (= no time) correctly
+   Still, comments such as 'o'clock', 'Uhr', '(doesn't run on Sunday)' are allowed*/
+// 
+function parseTime(timeString) {  
+  if (timeString == '') {return null;}
+  //inserted lines
+  if (timeString.indexOf("/")>=0) return null;
+  timeString = timeString.replace("p.m.","p");
+  timeString = timeString.replace("p.","p");
+  /* just replace the first occurrence of point if there is no ':'  */
+  if (timeString.indexOf(":")<0){
+    timeString = timeString.replace(".",":");
+  }
+  if (timeString.indexOf(".")>=0) return null;
+  if (timeString.match(/(\d+)(:(\d\d\d))/i) != null) return null;
+  // end of insertion
+  var time = timeString.match(/(\d+)(:(\d\d))?\s*(p?)/i);  
+  if (time == null) return null;
+  var hours = parseInt(time[1],10);   
+  if (hours > 23) return null;
+  //reject time strings without minutes or with 60+ minutes
+  if (!time[3] || parseInt(time[3],10) >59) return null;
+  hours += (hours < 12 && time[4])? 12 : 0; 
+  var d = new Date();            
+  d.setHours(hours);
+  d.setMinutes(parseInt(time[3],10) || 0);
+  d.setSeconds(0, 0);  
+  return d;
+}
+
+function ShowWarning(msg){
+  document.getElementById("duration").innerHTML = '<font style="color:red;font-weight:bold">'+msg+'</font>';
+}
+function ShowInfo(msg){
+  document.getElementById("duration").innerHTML = '<font style="color:blue;font-weight:bold">'+msg+'</font>';
+}
+function DeleteInfo(msg){
+  document.getElementById("duration").innerHTML = '';
+}
+
+function CopyTextEntry() {
+  /* Get the text field */
+  var copyText = document.getElementById("myInput");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+  ShowInfo("Copied the text");
+} 
+
+function InsertNowTime(datefield, timefield){
+  var date = new Date();
+  var currentTime = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+  //var currentDate = date.toISOString().slice(0,10);
+  document.getElementById(datefield).valueAsDate = date;
+  document.getElementById(timefield).value = currentTime;
+  delete date;
+}
+
+function dateDiffInDays(a, b) {
+  const utc1 = a;
+  const utc2 = b;
+  return Math.floor((utc2 - utc1) / 86400000);
+}
+function timeDiffInMins(a, b) {
+  const utc1 = parseTime(a);
+  const utc2 = parseTime(b);
+  return Math.floor((utc2 - utc1) / 60000);
+}
+/* Check if start date is not after end date */
+function DateValidity(){
+  DeleteInfo();
+  idx=0;
+  begin = Date.parse(document.getElementById("startofevent").value);
+  end = Date.parse(document.getElementById("endofevent").value);
+  tbegin = document.getElementById("start_time_ofevent").value;
+  tend = document.getElementById("end_time_ofevent").value;
+  
+  if(document.getElementById("startofevent").value !=''){
+    if (document.getElementById("endofevent").value ===''){
+      /* 1-day trip: don't need to set second date field*/
+      idx = 1;
+      dd = 0;
+    }
+    else {
+      /* if second date is set, compute the difference*/
+      dd = dateDiffInDays(begin,end);
+    }
+    
+    if (dd>0){
+      /* event duration more than one day */
+      ShowInfo(dd+" Tage");
+      idx = dd+1;
+    }
+    else if (dd===0){
+      /* it was all on the same day */
+      var dur = timeDiffInMins(tbegin,tend);
+      if(tbegin !='' && tend !='')
+      {
+        if(dur<0){
+          ShowWarning("End before begin!");
+          idx = 0;
+        }
+        else{
+          ShowInfo(dur+" min.")
+          idx = 1;
+        };
+      }
+      else {
+        /* okay if only one time is given, e.g. shop leaving, plane takeoff */
+        idx=1;
+      }
+    }
+    else{
+      ShowWarning("End before begin!");
+    }
+  }
+  else{
+    ShowWarning("Empty date field");
+  }
+  return idx;
+}
+
+var ElList = ["startofevent", "start_time_ofevent", "endofevent", "end_time_ofevent", "activity", "actiattrib", "persons"];
+function ClearAllFields(){
+  for (i=0; i<ElList.length; i++){
+    document.getElementById(ElList[i]).value='';
+  }
+  DeleteInfo();
+}
+
+function ClearOutputArea(){
+  document.getElementById("output").value = '';
+}
+
+function CopyCalendarEntry(){
+  /** Will log an entry and refresh fields if and only if the first date is set.
+  So you can fill first date if it's empty **/
+  if(DateValidity()>0){
+  var buff = [];
+  for (i=0; i<ElList.length; i++){
+    buff.push(document.getElementById(ElList[i]).value);
+    document.getElementById(ElList[i]).value='';
+  }
+  document.getElementById("output").value += buff.join("\t")+"\r\n";
+  buff= null;
+  }
+}
+
+function CtoC(){
+  /* Select the text field */
+  var optx = document.getElementById("output");
+  optx.select();
+  optx.setSelectionRange(0, 99999); /*For mobile devices*/
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+  }
+ 
+// Restaurant data scripting
+function makeStruct(names) {
+  var names = names.split(' ');
+  var count = names.length;
+  function constructor() {
+    for (var i = 0; i < count; i++) {
+      this[names[i]] = arguments[i];
+    }
+  }
+  return constructor;
+}
+var Restaurant = makeStruct("id street city phone web email open");
+function getRInfos(what){
+  return [what.street, what.city, what.phone, what.web, what.email];
+}
+
+var Museum = makeStruct("id street city web localtransport open");
+function getMInfos(what){
+  return [what.street, what.city, what.web, what.localtransport];
+}
+
+function ShowRestaurantData(somelist){
+  var tx = '<table border=2 style="font-size:small">';
+  var j;
+  var openinfos;
+  
+  for(j=0; j<somelist.length; j++) {
+    openinfos = !somelist[j].open?'':somelist[j].open;
+    tx += '<tr><td><p>'+somelist[j].id+'<br><em>'+openinfos+"</em></p><td/><p>"+getRInfos(somelist[j]).join('<br>')+'</p></td></tr>';
+  }
+  tx += '</table>';
+  document.getElementById("Datenplatz").innerHTML = tx;
+}
+
+function ShowMuseumData(somelist){
+  var tx = '<table border=2 style="font-size:small">';
+  var j;
+  var openinfos;
+  
+  for(j=0; j<somelist.length; j++) {
+    openinfos = !somelist[j].open?'':somelist[j].open;
+    tx += '<tr><td><p>'+somelist[j].id+'<br><em>'+openinfos+"</em></p><td/><p>"+getMInfos(somelist[j]).join('<br>')+'</p></td></tr>';
+  }
+  tx += '</table>';
+  document.getElementById("Datenplatz").innerHTML = tx;
+}
+</script>
+
+<h1>Offline Covid Diary</h1>
+<details style="margin-bottom:2ex"><summary>Anleitung</summary>
+<p>Lokale Schreibhilfe für Kontakt-Eintragungen (Gedächtnisstütze).<br>
+Alle Bestandteile sind lokal gespeichert, kein Bestandteil dieser Seite kommuniziert mit dem 
+Internet. Es gibt eine CSV-Exportfunktion als übersichtliche Tabellenform. 
+Diese nutzt zwar den "Download"-Ort des Browsers, aber lädt nichts aus dem Internet.<br>
+<b>Die Seite speichert nichts automatisch. Bitte lesen Sie dazu auch den Abschnitt "Speichern"!</b></p>
+
+<details><summary>Lieblingsorte anlegen</summary>
+<p>Lieblingsorte (ohne Adresse, aber eindeutig benannt*), häufig anwesende Personen (Initialen, Spitznamen, welche ebenfalls eindeutig für Sie zurückzuführen sind*) und häufige Gegebenheiten (drinnen, draußen) legen Sie in dieser HTML nach gleichem Muster von Hand an, um die Namen der Orte etc. nicht erneut tippen zu müssen.</p>
+<p><b>Besondere Felder</b><br>
+Folgendes können Sie in ein <tt>&lt;span&gt;</tt>-Tag einfügen:
+<ul><li><tt>class="friend"</tt> bewirkt, dass der Eintrag in das Feld "Wer war dabei" geschrieben wird.</li>
+<li><tt>class="att"</tt> fügt den Eintrag ins Gegebenheiten-Feld ein.</li>
+<li><tt>class="starttime"</tt> bzw. <tt>class="endtime"</tt> fügt den Eintrag ins Feld für die Startzeit bzw. die Endzeit (von/bis... um:) ein.</li>
+</ul>
+
+<p>* Wenn Sie diese Infos fürs Gesundheitsamt o.ä. ausdrucken, können und sollten Sie für diesen Zweck zu dem relevanten Zeitraum entsprechende E-Mailadressen, Telefonnummern oder Weblinks ergänzen.</p>
+</details>
+
+<details><summary>Speichern</summary>
+Diese Seite speichert selbst nichts. Wenn Sie sie schließen und dann erneut öffnen, werden die Felder leer sein.
+Eintragungen speichern Sie, indem Sie auf "Export &rightarrow; CSV" klicken oder auf "Kopieren" klicken.
+Bei "Kopieren" wird der Inhalt in Ihre (Desktop- oder Smartphone-) Zwischenablage kopiert. Sie können dann MS Excel, OpenOffice, den Windows-Editor, einen E-Mail-Entwurf oder eine Notiz-App verwenden, um den Inhalt für später aufzubewahren.
+</details></details>
+
+<div class="column form" id="app_begin">
+  <table><tbody><tr><td><label for="startofevent">Von:</label><input type="date" id="startofevent" name="startofevent"></td>
+  <td><label for="start_time_ofevent">um:</label><input type="time" id="start_time_ofevent" name="start_time_ofevent">
+  <div id="duration"></div></td>
+  <td><button id="startsnow" title="Start: Aktuelle Zeit einfügen" onClick="InsertNowTime('startofevent','start_time_ofevent');">&#x23f0;</button></td></tr>
+  <tr>
+    <td><label for="endofevent">bis:&nbsp;</label><input type="date" id="endofevent" name="endofevent"></td>
+    <td><label for="end_time_ofevent">um:</label><input type="time" id="end_time_ofevent" name="end_time_ofevent">
+    <td><button class="small"; title="Ende: Aktuelle Zeit einfügen" id="startsnow" onClick="InsertNowTime('endofevent','end_time_ofevent');">&#x23f0;</button></td></td>
+  </tr>
+  </tbody></table><div id="jserrors"></div>
+
+  <table><tbody><tr><td><label for="activity">Ereignis:</label>
+  <input style="width:20em" type="text" id="activity"></td></tr>
+  <tr><td><label for="actiattrib">Gegebenheiten:</label>
+  <input style="width:20em" type="text" id="actiattrib"></td></tr>
+  <tr><td><label for="persons">Wer war dabei (Initialen erlaubt):</label>
+  <input style="width:20em" type="text" id="persons"></td></tr></tbody></table>
+
+<button title="Eintrag ins Textfeld übernehmen" onclick="CopyCalendarEntry();" class="color2">Eintrag hinzufügen</button>
+<a href="javascript:void(0)" id="dlbtn">
+<button title="Einträge als (Excel-)CSV speichern" id="exporttocsv" onclick="create()" class="color1">Export &rightarrow; CSV</button></a>
+<button title="Inhalt des Textfelds in die Zwischenablage kopieren" id="copybutton" onclick="CtoC();" class="color2">Einträge kopieren</button>
+<button title="Alle Formularfelder leeren" id="clearallfields" onclick="ClearAllFields();" class="color1">Felder leeren</button>
+</div>
+
+<div class="column" id="frequent">
+<details open=""><summary>Einzelhandel</summary>
+  <details><summary>&#x1F6D2; Lebensmittel</summary>
+	<p><span>Aldi</span> <span>Edeka</span> <span>Lidl</span> <span>Netto</span> <span>Penny</span> <span>REWE</span> 
+		<span>Getränkemarkt</span> <em>nur Beispiele</em>
+	</p>
+  </details>
+  <details><summary>&#x1F6CD; Sonstiges</summary>
+    <p><span>Baumarkt</span> <span>Drogerie</span> <span>Apotheke</span>
+		<span>Kaufhaus 1</span> <span>Kaufhaus 2</span>
+	</p>
+  </details>
+  <details><summary>&#x1F4D1; Bücher, Schreibwaren und Deko</summary>
+	<p><span>Buchhandlung X</span> <span>Dekoladen Y</span>
+	</p>
+  </details>
+</details>
+</div>
+
+<div class="column" id="travelling">
+<details><summary class="remark">&#x1F68E; Fahrten und Zeiten</summary>
+	<p><span>Start-Ziel</span> <span>Ziel-Start</span> <em>anpassen</em></p>  
+	<p>&#9655; <span>Abfahrt</span> <span>Beginn</span> <span class="starttime">8:00</span><br>
+	&#9665; <span>Ankunft</span> <span>Ende</span> <span class="endtime">17:12</span> <span class="endtime">18:00</span></p>
+	<p><span>PKW</span> <span>Bus</span> <span>RE</span> <span>Taxi</span>
+	<span>S-Bahn</span> <span>U-Bahn</span>
+	</p>
+</details>
+
+<div class="column" id="myfriends">
+<details open="" class="important"><summary class="remark">&#x1f465; Anwesende Bekannte</summary>
+	<p><span class="friend">Mutter</span> <span class="friend">Vater</span>  <span class="friend">Markus</span>
+	<span class="friend">Nachbarin</span><br>
+	<span class="friend">Dennis</span> <span class="friend">Tamara</span> 
+	<span class="friend">Hausmeister</span><br>
+	<span class="friend">Kumpel (3-fach geimpft)</span><br>
+	</p>
+</details>
+</div>
+</div>
+
+<div class="column" id="placeslist">
+<details><summary>Orte</summary>
+	<p>&#x1F6AA; <span>Zu Hause</span> <span>Keller</span> <span>Fitness-Studio</span> <span>Friseursalon</span> <span>VHS</span> </p>
+	<p><span>München</span> <span>München-Pasing</span> <span>Freising</span> </p>
+	<p><span>Marienplatz</span> <span>Englischer Garten</span> <span>Hbf.</span>
+	<span>Einkaufszentrum</span></p>
+	<p><span>Einkaufsbahnhof</span> <span>Einkaufshalle</span></p>
+	</p>
+</details>
+</div>
+
+<div class="column" id="gastroculture">
+<details open=""><summary>Gastronomie</summary>
+	<details open=""><summary>Stadtbeispiel</summary>
+		<p><span>Lieblingsitaliener (Ortsn.)</span> <span>Lieblings-Eckkneipe (Ortsn.)</span> 
+		<span>Lieblings-Raststätte</span> <span>Lieblings-Backshop</span>
+		<span>Lieblings-Imbiss</span> <span>etc.</span></p>
+	</details>
+	<details><summary>Außerhalb</summary>
+		<p><span>Ausflugsgaststätte</span> <span>Biergarten</span>
+	</details>
+</details>
+
+<details open=""><summary>&#x1F3DB; Kultur</summary>
+    <p><span>Kino</span> <span>Kirche</span> <span>Konzert</span> <span>Museum</span> 
+    </p>
+</details>
+</div>
+
+<div class="column" id="conditi">
+<details open="" class="important"><summary class="remark">Bedingungen</summary>
+  <p>&#x1f3e0; <span class="att">drinnen</span> <span class="att">draußen</span> <span class="att">stickig</span> <span class="att">halboffen</span></p> 
+  <p>&#x1f374; <span class="att">Essen/Trinken</span> <span class="att">Gesang/Plaudern</span> <span class="att">Sport/körp. Tätigkeit</span></p> 
+  <p>&#x1f465; <span class="att">fast leer</span> <span class="att">gut&nbsp;besucht</span> <span class="att">voll</span> 
+  <span class="att">Unter Mindestabstand</span> </p>
+  <p>&#x26DF; <span class="att">Lieferung</span> <span class="att">Handwerker</span></p> 
+  <p>&#x23f0; <span class="att">kurz</span> <span class="att">1-5 Min.</span> <span class="att">5-10 Min.</span> <span class="att">länger</span> 
+  </p>
+</details>
+</div>
+
+<script>
+// Restaurant and 'non-food building' such as Museum/Bildungseinrichtung data can be added here
+var RLIST = [];
+var MLIST = [];
+RLIST.push(new Restaurant("Foo Bar", 'Some Street 1', '12345 Village', 'add phone number', 'http add web here', 'name @ somedomain .de', 'winter: daily/summer: closed on Wednesday'));
+RLIST.push(new Restaurant("Joe's Pub", 'Some other street 11', '11111 Some city', 'some phone', 'some web', 'some @ email .com', 'closed on Monday'));
+
+MLIST.push(new Museum("City Museum", "Street", "PostalCode Some-City", "Website <br>&#x260e; Tel.Nr. for ticket reservation", "subway station nearby", "opening hours"));
+</script>
+
+<!-- don't edit below this line -->
+<button class="color1" title="Restaurantdaten anzeigen" style="color:white" onClick="ShowRestaurantData(RLIST);">&#x261b; &#x1f374; &#x260e;</button>
+<button class="color2" title="Andere Gebäudeinfos anzeigen" style="color:white" onClick="ShowMuseumData(MLIST);">&#x261b; &#x1F3DB; &#x260e;</button>
+<p>&nbsp;</p>
+<div class="column" style="background:wheat">
+  <details open>
+    <summary class="remark">Datenfenster</summary>
+    <div id="Datenplatz">&nbsp;</div>
+  </details>
+</div>
+
+<script>
+function HTMLToReadable(xval){
+  xval = xval.replaceAll("&amp;", "&");
+  xval = xval.replaceAll("&lt;", "<");
+  xval = xval.replaceAll("&gt;", ">");
+  xval = xval.replaceAll("&nbsp;", " ");
+  return xval;
+}
+
+class NamedButton {
+  /** add click function to some HTML ID
+  NamedButton('tagobj') adds onclick function to an HTML tagobject 
+  (not multiple objects) called by document.getElement....
+  */
+  constructor(tagobj, towhere) {
+  this.tagobj = tagobj;
+  var xobj = this.tagobj;
+  /* get the tag's text */
+  var xname = this.tagobj.innerHTML;
+  this.name = xname;
+  if(!xobj){
+    console.log("Requested html-tag "+ this.tagobj + " does not exist!");
+  }
+  else{
+  this.tagobj.addEventListener('click',function(){
+    // get current entry of corresponding input field
+    let xval = document.getElementById(towhere).value;
+    if (xval.length > 0){
+      xval+=', ';
+    }
+    // and add xname to that entry, then update the entry
+    xval += xname;
+    document.getElementById(towhere).value = HTMLToReadable(xval);
+  });
+  }
+  }
+}
+
+class NamedTimeButton {
+  /** turn html tags which provide a time value into clickable 'buttons' */
+  constructor(tagobj, towhere) {
+    try{
+      this.tagobj = tagobj;
+      var xobj = this.tagobj;
+      /* get the tag's text */
+      var xname = parseTime(this.tagobj.innerHTML).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      this.name = xname;
+      /* perhaps no need for the existance test */
+      if(!xobj){
+        console.log("Requested html-tag "+ this.tagobj + " does not exist!");
+      }
+      else{
+        this.tagobj.addEventListener('click',function(){
+          document.getElementById(towhere).value = xname;
+        });
+      }
+    }
+    catch (error){
+      var badobj = this.tagobj.innerHTML;
+      document.getElementById("jserrors").innerHTML ="<font color=red>Some HTML-Tags wrong</font>";
+      this.tagobj.style.color='red';
+      this.tagobj.style.background='yellow';
+    }
+  }
+}
+
+function MakeButtonsOfSpans(){
+  /** Collects any 'span' tags in the html and adds NamedButton object to each of them*/
+  allspans = document.getElementsByTagName('span');
+  var i;
+  for (i=0; i<allspans.length; i++){
+    if (allspans[i].className.indexOf('att') >= 0) {
+      new NamedButton(allspans[i], "actiattrib");
+    }
+    else if (allspans[i].className.indexOf('friend') >= 0) {
+      new NamedButton(allspans[i], "persons");
+    }
+    /* set time buttons for regular scheduled trains */
+    else if (allspans[i].className.indexOf("starttime") >= 0) {
+      new NamedTimeButton(allspans[i], "start_time_ofevent");
+    }
+    else if (allspans[i].className.indexOf("endtime") >= 0) {
+      new NamedTimeButton(allspans[i], "end_time_ofevent");
+    }
+    else {
+      new NamedButton(allspans[i], "activity");
+    }
+  }
+}
+
+MakeButtonsOfSpans();
+
+// CSV export function
+function create() {
+  var date = new Date();
+  // 'se' simple way for YYYYMMDD
+  var fileDate = date.toLocaleString('se', {year: 'numeric', month: '2-digit', day: '2-digit'}).replace(/\D/g, '');
+  //var fileDate = date.toLocaleDateString([],{month:'2-digit', day:'2-digit', year:'numeric'}).replace('.','');
+  var currentTime = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}).replace(/\D/g, '');
+  var headline = "Von;um;bis;um;Ereignis;Bemerkungen;Anwesende bzw. Extras\r\n";
+  var textToWrite = headline+document.getElementById("output").value.replaceAll("\t",";");
+  var dlbtn = document.getElementById("dlbtn");
+  var file = new Blob([textToWrite], {type: 'text/csv;charset=utf-8;',endings:'native'});
+  dlbtn.href = URL.createObjectURL(file);
+  dlbtn.download = "Covid-19-Eintragungen_"+fileDate+"-"+currentTime+".csv";
+  delete date;
+}
+</script>
+
+
+<div style="margin-top:5ex;width:100%;display:inline-block" id="dasda">
+   <button class="color1" style="color:white" onClick="ClearOutputArea();">&#x274C; &#x2757; Textausgabe leeren</button>
+   <textarea style="width:100%;height:7em" type="text" value="..." id="output"></textarea>
+</div>
+
+<a href="https://github.com/DGrothe-PhD/LocalCovidDiary">Project on GitHub</a>
+</font>
+
+</body></html>

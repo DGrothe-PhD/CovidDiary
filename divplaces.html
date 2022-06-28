@@ -1,0 +1,87 @@
+<div class="column" id="frequent">
+<details open=""><summary>Einzelhandel</summary>
+  <details><summary>&#x1F6D2; Lebensmittel</summary>
+	<p><span>Aldi</span> <span>Edeka</span> <span>Lidl</span> <span>Netto</span> <span>Penny</span> <span>REWE</span> 
+		<span>Getränkemarkt</span> <em>nur Beispiele</em>
+	</p>
+  </details>
+  <details><summary>&#x1F6CD; Sonstiges</summary>
+    <p><span>Baumarkt</span> <span>Drogerie</span> <span>Apotheke</span>
+		<span>Kaufhaus 1</span> <span>Kaufhaus 2</span>
+	</p>
+  </details>
+  <details><summary>&#x1F4D1; Bücher, Schreibwaren und Deko</summary>
+	<p><span>Buchhandlung X</span> <span>Dekoladen Y</span> <span>Zeitungsladen</span>
+	</p>
+  </details>
+</details>
+</div>
+
+<div class="column" id="travelling">
+<details><summary class="remark">&#x1F68E; Fahrten und Zeiten</summary>
+	<p><span>Start-Ziel</span> <span>Ziel-Start</span> <em>anpassen</em></p>  
+	<p>&#9655; <span>Abfahrt</span> <span>Beginn</span> <span class="starttime">8:00</span><br>
+	&#9665; <span>Ankunft</span> <span>Ende</span> <span class="endtime">17:12</span> <span class="endtime">18:00</span></p>
+	<p><span>PKW</span> <span>Bus</span> <span>RE</span> <span>Taxi</span>
+	<span>S-Bahn</span> <span>U-Bahn</span>
+	</p>
+</details>
+
+<div class="column" id="myfriends">
+<details open="" class="important"><summary class="remark">&#x1f465; Anwesende Bekannte</summary>
+	<p><span class="friend">Mutter</span> <span class="friend">Vater</span> 
+	<span class="friend">Hausmeister</span> </p>
+</details>
+</div>
+</div>
+
+<div class="column" id="placeslist">
+<details><summary>Orte</summary>
+	<p>&#x1F6AA; <span>Zu Hause</span> <span>Keller</span> <span>Fitness-Studio</span> <span>Barbershop</span> <span>VHS</span> </p>
+	<p><span>Stadtbeispiel</span></p>
+	<p><span>Marktplatz</span> <span>Stadtpark</span> <span>Hbf.</span>
+	<span>Einkaufszentrum</span></p>
+	<p><span>Kleinstadt</span></p>
+	</p>
+</details>
+</div>
+
+<div class="column" id="gastroculture">
+<details open=""><summary>Gastronomie</summary>
+	<details open=""><summary>Stadtbeispiel</summary>
+		<p><span>Lieblingsitaliener (Ortsn.)</span> <span>Lieblings-Eckkneipe (Ortsn.)</span> 
+		<span>Lieblings-Raststätte</span> <span>Lieblings-Backshop</span>
+		<span>Lieblings-Imbiss</span> <span>etc.</span></p>
+	</details>
+	<details><summary>Außerhalb</summary>
+		<p><span>Ausflugsgaststätte</span> <span>Biergarten</span>
+	</details>
+</details>
+
+<details open=""><summary>&#x1F3DB; Kultur</summary>
+    <p><span>Kino</span> <span>Kirche</span> <span>Konzert</span> <span>Museum</span> 
+    </p>
+</details>
+</div>
+
+<div class="column" id="conditi">
+<details open="" class="important"><summary class="remark">Bedingungen</summary>
+  <p>&#x1f3e0; <span class="att">drinnen</span> <span class="att">draußen</span> <span class="att">stickig</span> <span class="att">halboffen</span></p> 
+  <p>&#x1f374; <span class="att">Essen/Trinken</span> <span class="att">Gesang/Plaudern</span> <span class="att">Sport/körp. Tätigkeit</span></p> 
+  <p>&#x1f465; <span class="att">fast leer</span> <span class="att">gut&nbsp;besucht</span> <span class="att">voll</span> 
+  <span class="att">Unter Mindestabstand</span> </p>
+  <p>&#x26DF; <span class="att">Lieferung</span> <span class="att">Handwerker</span></p> 
+  <p>&#x23f0; <span class="att">kurz</span> <span class="att">1-5 Min.</span> <span class="att">5-10 Min.</span> <span class="att">länger</span> 
+  </p>
+</details>
+</div>
+
+<script>
+// Restaurant and 'non-food building' such as Museum/Bildungseinrichtung data can be added here
+var RLIST = [];
+var MLIST = [];
+RLIST.push(new Restaurant("Foo Bar", 'Some Street 1', '12345 Village', 'add phone number', 'http add web here', 'name @ somedomain .de', 'winter: daily/summer: closed on Wednesday'));
+RLIST.push(new Restaurant("Joe's Pub", 'Some other street 11', '11111 Some city', 'some phone', 'some web', 'some @ email .com', 'closed on Monday'));
+
+MLIST.push(new Museum("City Museum", "Street", "PostalCode Some-City", "Website <br>&#x260e; Tel.Nr. for ticket reservation", "subway station nearby", "opening hours"));
+</script>
